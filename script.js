@@ -37,3 +37,29 @@ function operate(operator, num1, num2) {
     }
 }
 
+let firstNumber = "";
+let secondNumber = "";
+let operatorSelected = null;
+let shouldResetDisplay = false;
+
+const display = document.getElementById("display");
+// console.log("display", display.textContent);
+
+function updateDisplayValue(value) {
+    display.textContent = value;
+}
+
+function appendNumber(number) {
+    if(display.textContent === "0" || shouldResetDisplay) {
+        updateDisplayValue(number);
+        shouldResetDisplay = false;
+        // console.log("display", display.textContent);
+    } else {
+        updateDisplayValue(display.textContent + number);
+        // console.log("display", display.textContent);
+    }
+}
+
+document.querySelectorAll(".number").forEach(button => {
+    button.addEventListener("click", () => appendNumber(button.textContent));
+});
