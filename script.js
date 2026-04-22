@@ -37,7 +37,3 @@ function operate(operator, num1, num2) {
     }
 }
 
-operate('+', 56, 2);
-operate('-', 56, 2);
-operate('/', 56, 2);
-operate('*', 56, 2);
