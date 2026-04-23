@@ -24,7 +24,7 @@ body {
     gap: 12px;
 }
 
-#display {
+/* #display {
     grid-column: span 4;
     background: #111827;
     color: #F9FAFB;
@@ -32,6 +32,26 @@ body {
     text-align: right;
     padding: 16px;
     border-radius: 10px;
+} */
+ .display-container {
+    grid-column: span 4;
+    background: #111827;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+#history {
+    font-size: 14px;
+    color: #9ca3af;
+    text-align: right;
+    min-height: 20px;
+    opacity: 0.7;
+}
+
+#display {
+    font-size: 36px;
+    color: #f9fafb;
+    text-align: right;
 }
 
 button {
