@@ -54,7 +54,6 @@ function updateDisplayValue(value) {
 
 function appendNumber(number) {
     if (display.textContent.includes("Error")) {
-        console.log("append calls clear");
         clearDisplay();
     }
     if (display.textContent.length >= MAX_LENGTH && !shouldResetDisplay) {
@@ -69,8 +68,6 @@ function appendNumber(number) {
 }
 
 function clearDisplay() {
-    console.log("clear display", result);
-    // result !== 0? result : updateDisplayValue("0");
     updateDisplayValue("0");
     historyDisplay.textContent = "";
     firstNumber = "";
@@ -94,20 +91,12 @@ function setOperator(operator) {
 
 function evaluate() {
     if (display.textContent.includes("Error")) return;
-    console.log("evalue");
-    console.log("opertor seelcted", operatorSelected);
-    console.log("should reset", shouldResetDisplay);
-    console.log("display content in evaluate", display.textContent);
     if(operatorSelected === null || shouldResetDisplay || display.textContent === "") {
         return;
     }
 
     secondNumber = display.textContent;
-    console.log("Second num", secondNumber);
-    console.log("first num", firstNumber);
-
     result = operate(operatorSelected, firstNumber, secondNumber);
-    console.log("result", result);
 
     if (result === null) return;
     if (typeof result === "string") {
@@ -118,13 +107,10 @@ function evaluate() {
     }
 
     result = Math.round(result * 1000) / 1000;
-    console.log("rounded number", result);
 
     historyDisplay.textContent = `${firstNumber} ${operatorSelected} ${secondNumber} =`;
     updateDisplayValue(result);
-    console.log("line 130 result", result);
     firstNumber = result;
-    // result = 0;
     operatorSelected = null;
     shouldResetDisplay = true;
 }
@@ -132,14 +118,12 @@ function evaluate() {
 
 
 function backspace() {
-    // console.log("backspace ccall");
     if (shouldResetDisplay) return;
     let currentValue = display.textContent;
     currentValue.length === 1 ? updateDisplayValue("0") : updateDisplayValue(currentValue.slice(0, -1));
 }
 
 function handleDecimal() {
-    // console.log("inside add decimal");
     if (shouldResetDisplay) {
         updateDisplayValue("0.");
         shouldResetDisplay = false;
@@ -165,14 +149,19 @@ document.querySelector(".backspace").addEventListener("click", backspace);
 document.getElementById("decimal").addEventListener("click", handleDecimal);
 
 window.addEventListener("keydown", (e) => {
-    if (e.key === "Backspace") backspace();
-    if (e.key === "c") clearDisplay();
+    if (e.key === "Backspace") {
+        e.preventDefault();
+        backspace();
+    }
+    if (e.key === "c" || e.key === "C") {
+        e.preventDefault();
+        clearDisplay();
+    }
     if (!isNaN(e.key)) appendNumber(e.key);
     if (e.key === ".") handleDecimal();
-    if (["+", "-", "*", "/"].includes(e.key)) setOperator(e.key);
-    // if (e.key === "Enter") evaluate();  
+    if (["+", "-", "*", "/"].includes(e.key)) setOperator(e.key); 
     if (e.key === "Enter") {
-        e.preventDefault(); // Stop the browser from clicking the last button focused
+        e.preventDefault();
         evaluate();
     }
 });
