@@ -11,7 +11,7 @@ function multiplyNumbers(num1, num2) {
 }
 
 function divideNumbers(num1, num2) {
-    return (num2 === 0)? "Error. Division by 0 is not valid": num1 / num2;
+    return (num2 === 0)? "Error. Math is crying right now.": num1 / num2;
 }
 
 function operate(operator, num1, num2) {
@@ -46,9 +46,18 @@ const display = document.getElementById("display");
 
 function updateDisplayValue(value) {
     display.textContent = value;
+    if (typeof value === "string" && value.includes("Error")) {
+        display.classList.add("error");
+        historyDisplay.textContent = "";
+    } else {
+        display.classList.remove("error");
+    }
 }
 
 function appendNumber(number) {
+    if (display.textContent.includes("Error")) {
+        clearDisplay();
+    }
     if (display.textContent.length >= MAX_LENGTH && !shouldResetDisplay) {
         return;
     }
@@ -66,19 +75,19 @@ function appendNumber(number) {
 }
 
 function setOperator(operator) {
+    if (display.textContent.includes("Error")) return;
     if(operatorSelected !== null) {
         evaluate();
     }
-    if (display.textContent === "Error") return;
 
     firstNumber = display.textContent;
     operatorSelected = operator;
     historyDisplay.textContent = `${firstNumber} ${operator}`;
     shouldResetDisplay = true;
-    // justEvaluated = false;
 }
 
 function evaluate() {
+    if (display.textContent.includes("Error")) return;
     console.log("evalue");
     console.log("ope", operatorSelected);
     console.log("should reset", shouldResetDisplay);
@@ -96,12 +105,11 @@ function evaluate() {
     if (result === null) return;
     if (typeof result === "string") {
         console.log("type of is string");
-        updateDisplay(result);
-        operator = null;
+        updateDisplayValue(result);
+        operatorSelected = null;
         return;
     }
 
-    // // round long decimals
     result = Math.round(result * 1000) / 1000;
     console.log("rounded number", result)
 
@@ -111,7 +119,6 @@ function evaluate() {
     operatorSelected = null;
     shouldResetDisplay = true;
     // justEvaluated = true;
-    // historyDisplay.textContent = "";
 }
 
 function clearDisplay() {

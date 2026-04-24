@@ -24,15 +24,6 @@ body {
     gap: 12px;
 }
 
-/* #display {
-    grid-column: span 4;
-    background: #111827;
-    color: #F9FAFB;
-    font-size: 36px;
-    text-align: right;
-    padding: 16px;
-    border-radius: 10px;
-} */
  .display-container {
     grid-column: span 4;
     background: #111827;
@@ -54,6 +45,12 @@ body {
     text-align: right;
     overflow: hidden;
     white-space: nowrap;
+}
+
+#display.error {
+    font-size: 24px;
+    padding: 7px 0;
+    color: #ff4d4d;
 }
 
 button {
