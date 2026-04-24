@@ -14,7 +14,7 @@ body {
 }
 
 .calculator {
-    width: 420px;
+    width: 480px;
     background: #E5E7EB;
     border-radius: 16px;
     padding: 20px;
@@ -52,6 +52,8 @@ body {
     font-size: 36px;
     color: #f9fafb;
     text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 button {
