@@ -37,6 +37,7 @@ let secondNumber = "";
 let operatorSelected = null;
 let shouldResetDisplay = false;
 const MAX_LENGTH = 10;
+let result = 0;
 
 const historyDisplay = document.getElementById("history");
 const display = document.getElementById("display");
@@ -53,7 +54,7 @@ function updateDisplayValue(value) {
 
 function appendNumber(number) {
     if (display.textContent.includes("Error")) {
-        // console.log("append calls clear");
+        console.log("append calls clear");
         clearDisplay();
     }
     if (display.textContent.length >= MAX_LENGTH && !shouldResetDisplay) {
@@ -66,6 +67,18 @@ function appendNumber(number) {
         updateDisplayValue(display.textContent + number);
     }
 }
+
+function clearDisplay() {
+    console.log("clear display", result);
+    // result !== 0? result : updateDisplayValue("0");
+    updateDisplayValue("0");
+    historyDisplay.textContent = "";
+    firstNumber = "";
+    secondNumber = "";
+    operatorSelected = null;
+    shouldResetDisplay = false;
+}
+
 
 function setOperator(operator) {
     if (display.textContent.includes("Error")) return;
@@ -81,49 +94,42 @@ function setOperator(operator) {
 
 function evaluate() {
     if (display.textContent.includes("Error")) return;
-    // console.log("evalue");
-    // console.log("ope", operatorSelected);
-    // console.log("should reset", shouldResetDisplay);
-    // console.log("display content in evaluate", display.textContent);
+    console.log("evalue");
+    console.log("opertor seelcted", operatorSelected);
+    console.log("should reset", shouldResetDisplay);
+    console.log("display content in evaluate", display.textContent);
     if(operatorSelected === null || shouldResetDisplay || display.textContent === "") {
         return;
     }
 
     secondNumber = display.textContent;
-    // console.log("Second num", secondNumber);
-    // console.log("first num", firstNumber);
+    console.log("Second num", secondNumber);
+    console.log("first num", firstNumber);
 
-    let result = operate(operatorSelected, firstNumber, secondNumber);
-    // console.log("result", result);
+    result = operate(operatorSelected, firstNumber, secondNumber);
+    console.log("result", result);
 
     if (result === null) return;
     if (typeof result === "string") {
-        // console.log("type of is string");
+        console.log("type of is string");
         updateDisplayValue(result);
         operatorSelected = null;
         return;
     }
 
     result = Math.round(result * 1000) / 1000;
-    // console.log("rounded number", result)
+    console.log("rounded number", result);
 
     historyDisplay.textContent = `${firstNumber} ${operatorSelected} ${secondNumber} =`;
     updateDisplayValue(result);
-    // console.log("line 130 result", result);
+    console.log("line 130 result", result);
     firstNumber = result;
+    // result = 0;
     operatorSelected = null;
     shouldResetDisplay = true;
 }
 
-function clearDisplay() {
-    // console.log("clear display");
-    updateDisplayValue("0");
-    historyDisplay.textContent = "";
-    firstNumber = "";
-    secondNumber = "";
-    operatorSelected = null;
-    shouldResetDisplay = false;
-}
+
 
 function backspace() {
     // console.log("backspace ccall");
@@ -164,5 +170,9 @@ window.addEventListener("keydown", (e) => {
     if (!isNaN(e.key)) appendNumber(e.key);
     if (e.key === ".") handleDecimal();
     if (["+", "-", "*", "/"].includes(e.key)) setOperator(e.key);
-    if (e.key === "Enter") evaluate();  
+    // if (e.key === "Enter") evaluate();  
+    if (e.key === "Enter") {
+        e.preventDefault(); // Stop the browser from clicking the last button focused
+        evaluate();
+    }
 });
