@@ -15,8 +15,6 @@ function divideNumbers(num1, num2) {
 }
 
 function operate(operator, num1, num2) {
-    // if (num1 === "" || num2 === "") return null;
-    //todo- check number 
     num1 = Number(num1);
     num2 = Number(num2);
 
@@ -38,7 +36,6 @@ let firstNumber = "";
 let secondNumber = "";
 let operatorSelected = null;
 let shouldResetDisplay = false;
-// let justEvaluated = false;
 const MAX_LENGTH = 10;
 
 const historyDisplay = document.getElementById("history");
@@ -56,6 +53,7 @@ function updateDisplayValue(value) {
 
 function appendNumber(number) {
     if (display.textContent.includes("Error")) {
+        // console.log("append calls clear");
         clearDisplay();
     }
     if (display.textContent.length >= MAX_LENGTH && !shouldResetDisplay) {
@@ -64,11 +62,6 @@ function appendNumber(number) {
     if(display.textContent === "0" || shouldResetDisplay) {
         updateDisplayValue(number);
         shouldResetDisplay = false;
-        // if (justEvaluated) {
-        //     // historyDisplay.textContent = "";
-        //     justEvaluated = false;
-        // }
-        // historyDisplay.textContent = "";
     } else {
         updateDisplayValue(display.textContent + number);
     }
@@ -88,59 +81,59 @@ function setOperator(operator) {
 
 function evaluate() {
     if (display.textContent.includes("Error")) return;
-    console.log("evalue");
-    console.log("ope", operatorSelected);
-    console.log("should reset", shouldResetDisplay);
-    console.log("display content in evaluate", display.textContent);
+    // console.log("evalue");
+    // console.log("ope", operatorSelected);
+    // console.log("should reset", shouldResetDisplay);
+    // console.log("display content in evaluate", display.textContent);
     if(operatorSelected === null || shouldResetDisplay || display.textContent === "") {
         return;
     }
+
     secondNumber = display.textContent;
-    console.log("Second num", secondNumber);
-    console.log("first num", firstNumber);
+    // console.log("Second num", secondNumber);
+    // console.log("first num", firstNumber);
 
     let result = operate(operatorSelected, firstNumber, secondNumber);
-    console.log("result", result);
+    // console.log("result", result);
 
     if (result === null) return;
     if (typeof result === "string") {
-        console.log("type of is string");
+        // console.log("type of is string");
         updateDisplayValue(result);
         operatorSelected = null;
         return;
     }
 
     result = Math.round(result * 1000) / 1000;
-    console.log("rounded number", result)
+    // console.log("rounded number", result)
 
     historyDisplay.textContent = `${firstNumber} ${operatorSelected} ${secondNumber} =`;
     updateDisplayValue(result);
+    // console.log("line 130 result", result);
     firstNumber = result;
     operatorSelected = null;
     shouldResetDisplay = true;
-    // justEvaluated = true;
 }
 
 function clearDisplay() {
-    console.log("clear display");
+    // console.log("clear display");
     updateDisplayValue("0");
     historyDisplay.textContent = "";
     firstNumber = "";
     secondNumber = "";
     operatorSelected = null;
     shouldResetDisplay = false;
-    // justEvaluated = false;
 }
 
 function backspace() {
-    console.log("backspace ccall");
+    // console.log("backspace ccall");
     if (shouldResetDisplay) return;
     let currentValue = display.textContent;
     currentValue.length === 1 ? updateDisplayValue("0") : updateDisplayValue(currentValue.slice(0, -1));
 }
 
 function handleDecimal() {
-    console.log("inside add decimal")
+    // console.log("inside add decimal");
     if (shouldResetDisplay) {
         updateDisplayValue("0.");
         shouldResetDisplay = false;
@@ -165,11 +158,11 @@ document.querySelector(".clear").addEventListener("click", clearDisplay);
 document.querySelector(".backspace").addEventListener("click", backspace);
 document.getElementById("decimal").addEventListener("click", handleDecimal);
 
-// window.addEventListener("keydown", (e) => {
-//     if (!isNaN(e.key)) appendNumber(e.key);
-//     // if (e.key === ".") handleDecimal();
-//     if (["+", "-", "*", "/"].includes(e.key)) setOperator(e.key);
-//     if (e.key === "Enter") evaluate();
-//     if (e.key === "Backspace") backspace();
-//     if (e.key === "Escape") clearDisplay();
-// });
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Backspace") backspace();
+    if (e.key === "c") clearDisplay();
+    if (!isNaN(e.key)) appendNumber(e.key);
+    if (e.key === ".") handleDecimal();
+    if (["+", "-", "*", "/"].includes(e.key)) setOperator(e.key);
+    if (e.key === "Enter") evaluate();  
+});
