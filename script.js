@@ -100,7 +100,6 @@ function evaluate() {
 
     if (result === null) return;
     if (typeof result === "string") {
-        console.log("type of is string");
         updateDisplayValue(result);
         operatorSelected = null;
         return;
